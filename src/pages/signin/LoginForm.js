@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import _ from 'underscore';
 import Str from 'expensify-common/lib/str';
 import styles from '../../styles/styles';
-import ExpensifyButton from '../../components/ExpensifyButton';
 import Text from '../../components/Text';
+import Button from '../../components/Button';
 import * as Session from '../../libs/actions/Session';
 import ONYXKEYS from '../../ONYXKEYS';
 import withWindowDimensions, {windowDimensionsPropTypes} from '../../components/withWindowDimensions';
@@ -164,7 +164,7 @@ class LoginForm extends React.Component {
                     </Text>
                 )}
                 <View style={[styles.mt5]}>
-                    <ExpensifyButton
+                    <Button
                         success
                         text={this.props.translate('common.continue')}
                         isLoading={this.props.account.loading}
