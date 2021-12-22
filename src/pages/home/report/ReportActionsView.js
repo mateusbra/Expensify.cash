@@ -71,8 +71,8 @@ const propTypes = {
     /** Are we loading more report actions? */
     isLoadingReportActions: PropTypes.bool,
 
-    /** Are we waiting for data from report? */
-    isLoadingReportData: PropTypes.bool,
+    /** is report data loaded from report? */
+    isLoadedReportData: PropTypes.bool,
 
     /** The personal details of the person who is logged in */
     myPersonalDetails: PropTypes.shape(currentUserPersonalDetailsPropsTypes),
@@ -94,7 +94,7 @@ const defaultProps = {
     reportActions: {},
     session: {},
     isLoadingReportActions: false,
-    isLoadingReportData: false,
+    isLoadedReportData: false,
     personalDetails: {},
     myPersonalDetails: {},
 };
@@ -114,7 +114,6 @@ class ReportActionsView extends React.Component {
         this.didLayout = false;
 
         this.state = {
-            hasReportDataLoaded: false,
             isMarkerActive: false,
             localUnreadActionCount: this.props.report.unreadActionCount,
         };
@@ -133,13 +132,7 @@ class ReportActionsView extends React.Component {
 
     componentDidMount() {
         AppState.addEventListener('change', this.onVisibilityChange);
-        console.log("fui montado");
-        console.log(this.props.isLoadingReportData);
-        console.log("Report.getLastReadSequenceNumber(this.props.report.reportID) =",Report.getLastReadSequenceNumber(this.props.report.reportID));
-        console.log("reportID",this.props.report.reportID);
-        if(Report.getLastReadSequenceNumber(this.props.report.reportID)){
-            this.setState({hasReportDataLoaded:true});
-        }
+
         // If the reportID is not found then we have either not loaded this chat or the user is unable to access it.
         // We will attempt to fetch it and redirect if still not accessible.
         if (!this.props.report.reportID) {
@@ -180,7 +173,7 @@ class ReportActionsView extends React.Component {
             return true;
         }
 
-        if (nextProps.isLoadingReportData !== this.props.isLoadingReportData) {
+        if (nextProps.isLoadedReportData !== this.props.isLoadedReportData) {
             return true;
         }
 
@@ -212,11 +205,9 @@ class ReportActionsView extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        // Update unread count when Report data is ready for being accessed
-        if (this.props.isLoadingReportData !== prevProps.isLoadingReportData && this.state.hasReportDataLoaded === false) {
-            console.log("teste");
+        // Update unread count when Report data is ready for being accessed and doesn't have being accessed yet.
+        if ((this.props.isLoadedReportData !== prevProps.isLoadedReportData) && !this.state.hasReportDataLoaded) {
             this.setState({hasReportDataLoaded: true});
-            console.log(this.state.hasReportDataLoaded);
             this.updateLocalUnreadActionCount();
         }
 
@@ -443,7 +434,6 @@ class ReportActionsView extends React.Component {
                 ? this.props.report.unreadActionCount
                 : prevState.localUnreadActionCount + this.props.report.unreadActionCount;
             this.updateUnreadIndicatorPosition(localUnreadActionCount);
-            console.log("localunread",localUnreadActionCount);
             return {localUnreadActionCount};
         });
     }
@@ -616,8 +606,8 @@ export default compose(
     withLocalize,
     withPersonalDetails(),
     withOnyx({
-        isLoadingReportData: {
-            key: ONYXKEYS.IS_LOADING_REPORT_DATA,
+        isLoadedReportData: {
+            key: ONYXKEYS.INITIAL_REPORT_DATA_LOADED,
             initwithStoredValues: false,
         },
         isLoadingReportActions: {
