@@ -1019,7 +1019,7 @@ function fetchAllReports(
         .then((returnedReports) => {
             Onyx.set(ONYXKEYS.INITIAL_REPORT_DATA_LOADED, true);
             Onyx.set(ONYXKEYS.IS_LOADING_REPORT_DATA, false);
-
+            Onyx.set(ONYXKEYS.IS_REPORT_DATA_LOADED, true);
             // If at this point the user still doesn't have a Concierge report, create it for them.
             // This means they were a participant in reports before their account was created (e.g. default rooms)
             const hasConciergeChat = _.some(returnedReports, report => ReportUtils.isConciergeChatReport(report));

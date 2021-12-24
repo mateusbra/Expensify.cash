@@ -33,6 +33,7 @@ export default function () {
                 loading: false, error: false, creatingIOUTransaction: false, isRetrievingCurrency: false,
             },
             [ONYXKEYS.IS_SIDEBAR_LOADED]: false,
+            [ONYXKEYS.IS_REPORT_DATA_LOADED]: false,
         },
         registerStorageEventListener: (onStorageEvent) => {
             listenToStorageEvents(onStorageEvent);

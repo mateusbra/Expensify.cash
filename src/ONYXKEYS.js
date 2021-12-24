@@ -172,4 +172,5 @@ export default {
     // Stores information about active wallet transfer amount, selectedAccountID, status, etc
     WALLET_TRANSFER: 'walletTransfer',
 
+    IS_REPORT_DATA_LOADED: 'isReportDataLoaded',
 };
