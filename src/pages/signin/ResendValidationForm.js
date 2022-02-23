@@ -38,12 +38,17 @@ const propTypes = {
         /** Whether or not the account already exists */
         accountExists: PropTypes.bool,
     }),
+    session: PropTypes.shape({
+        error: PropTypes.string,
+    }),
 
     ...withLocalizePropTypes,
 };
 
 const defaultProps = {
     account: {},
+    credentials: {},
+    session: {},
 };
 
 class ResendValidationForm extends React.Component {
@@ -94,7 +99,10 @@ class ResendValidationForm extends React.Component {
         const loginType = (isSMSLogin ? this.props.translate('common.phone') : this.props.translate('common.email')).toLowerCase();
         let message = '';
 
-        if (isNewAccount) {
+        if(this.props.session.error) {
+            message = this.props.session.error;
+        }
+        else if (isNewAccount) {
             message = this.props.translate('resendValidationForm.newAccount', {
                 login,
                 loginType,
@@ -137,6 +145,7 @@ class ResendValidationForm extends React.Component {
                             {this.props.translate('common.back')}
                         </Text>
                     </TouchableOpacity>
+                    {_.isEmpty(this.props.session.error) && (
                     <Button
                         medium
                         success
@@ -145,6 +154,7 @@ class ResendValidationForm extends React.Component {
                         onPress={this.validateAndSubmitForm}
                         style={styles.resendLinkButton}
                     />
+                    )}
                 </View>
             </>
         );
@@ -159,5 +169,6 @@ export default compose(
     withOnyx({
         credentials: {key: ONYXKEYS.CREDENTIALS},
         account: {key: ONYXKEYS.ACCOUNT},
+        session: {key: ONYXKEYS.SESSION},
     }),
 )(ResendValidationForm);

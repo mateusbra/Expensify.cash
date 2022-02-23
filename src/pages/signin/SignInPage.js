@@ -31,6 +31,14 @@ const propTypes = {
 
         /** Whether or not the account is validated */
         forgotPassword: PropTypes.bool,
+
+        loading: PropTypes.bool,
+    }),
+
+    session: PropTypes.shape({
+        loading: PropTypes.bool,
+
+        error: PropTypes.string,
     }),
 
     /** The credentials of the person signing in */
@@ -45,6 +53,7 @@ const propTypes = {
 
 const defaultProps = {
     account: {},
+    session: {},
     credentials: {},
 };
 
@@ -58,7 +67,7 @@ class SignInPage extends Component {
     render() {
         // Show the login form if
         // - A login has not been entered yet
-        const showLoginForm = !this.props.credentials.login;
+        const showLoginForm = (!this.props.credentials.login && !this.props.session.error) || (this.props.account.loading || this.props.session.loading);
 
         const validateCodeExpired = lodashGet(this.props.account, 'validateCodeExpired', false);
 
@@ -80,7 +89,7 @@ class SignInPage extends Component {
         // - A login has been entered
         // - AND a GitHub username has been entered OR they already have access to this app
         // - AND an account did not exist or is not validated for that login
-        const shouldShowResendValidationLinkForm = this.props.credentials.login && !validAccount;
+        const shouldShowResendValidationLinkForm = (this.props.credentials.login || this.props.session.error) && !validAccount && !this.props.account.loading && !this.props.session.loading;
 
         const welcomeText = shouldShowResendValidationLinkForm
             ? ''
@@ -111,5 +120,6 @@ export default compose(
     withOnyx({
         account: {key: ONYXKEYS.ACCOUNT},
         credentials: {key: ONYXKEYS.CREDENTIALS},
+        session: {key: ONYXKEYS.SESSION},
     }),
 )(SignInPage);

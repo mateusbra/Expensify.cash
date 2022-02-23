@@ -37,6 +37,11 @@ const propTypes = {
         loading: PropTypes.bool,
     }),
 
+    session: PropTypes.shape({
+        error: PropTypes.string,
+        loading: PropTypes.bool,
+    }),
+
     ...windowDimensionsPropTypes,
 
     ...withLocalizePropTypes,
@@ -46,6 +51,7 @@ const propTypes = {
 
 const defaultProps = {
     account: {},
+    session: {},
     blurOnSubmit: false,
 };
 
@@ -174,7 +180,7 @@ class LoginForm extends React.Component {
                     <Button
                         success
                         text={this.props.translate('common.continue')}
-                        isLoading={this.props.account.loading}
+                        isLoading={this.props.account.loading || this.props.session.loading}
                         onPress={this.validateAndSubmitForm}
                     />
                 </View>
@@ -189,6 +195,7 @@ LoginForm.defaultProps = defaultProps;
 export default compose(
     withOnyx({
         account: {key: ONYXKEYS.ACCOUNT},
+        session: {key: ONYXKEYS.SESSION},
     }),
     withWindowDimensions,
     withLocalize,
