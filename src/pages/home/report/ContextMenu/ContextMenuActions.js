@@ -8,6 +8,7 @@ import * as ReportUtils from '../../../../libs/reportUtils';
 import ReportActionComposeFocusManager from '../../../../libs/ReportActionComposeFocusManager';
 import {hideContextMenu, showDeleteModal} from './ReportActionContextMenu';
 import CONST from '../../../../CONST';
+import Str from 'expensify-common/lib/str';
 
 /**
  * Gets the HTML version of the message in an action.
@@ -22,16 +23,28 @@ function getActionText(reportAction) {
 const CONTEXT_MENU_TYPES = {
     LINK: 'LINK',
     REPORT_ACTION: 'REPORT_ACTION',
+    EMAIL: 'EMAIL',
 };
 
 // A list of all the context actions in this menu.
 export default [
     {
-        textTranslateKey: 'reportActionContextMenu.copyURLToClipboard',
+        textTranslateKey:'reportActionContextMenu.copyURLToClipboard',
         icon: Expensicons.Clipboard,
         successTextTranslateKey: 'reportActionContextMenu.copied',
         successIcon: Expensicons.Checkmark,
         shouldShow: type => type === CONTEXT_MENU_TYPES.LINK,
+        onPress: (closePopover, {selection}) => {
+            Clipboard.setString(selection);
+            hideContextMenu(true, ReportActionComposeFocusManager.focus);
+        },
+    },
+    {
+        textTranslateKey:'reportActionContextMenu.copyEmailToClipboard',
+        icon: Expensicons.Clipboard,
+        successTextTranslateKey: 'reportActionContextMenu.copied',
+        successIcon: Expensicons.Checkmark,
+        shouldShow: type => type === CONTEXT_MENU_TYPES.EMAIL,
         onPress: (closePopover, {selection}) => {
             Clipboard.setString(selection);
             hideContextMenu(true, ReportActionComposeFocusManager.focus);
