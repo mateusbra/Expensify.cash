@@ -164,6 +164,7 @@ export default {
         copied: 'Copied!',
         copyLink: 'Copy link',
         copyURLToClipboard: 'Copy URL to clipboard',
+        copyEmailToClipboard: 'Copy e-mail to clipboard',
         markAsUnread: 'Mark as unread',
         editComment: 'Edit comment',
         deleteComment: 'Delete comment',
