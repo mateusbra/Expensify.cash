@@ -11,6 +11,7 @@ import CONST from '../../../CONST';
 import styles from '../../../styles/styles';
 import Navigation from '../../../libs/Navigation/Navigation';
 import AnchorForCommentsOnly from '../../AnchorForCommentsOnly';
+import { openOldDotLink } from '../../../libs/actions/Link';
 
 const AnchorRenderer = (props) => {
     const htmlAttribs = props.tnode.attributes;
@@ -20,6 +21,7 @@ const AnchorRenderer = (props) => {
     const displayName = lodashGet(props.tnode, 'domNode.children[0].data', '');
     const parentStyle = lodashGet(props.tnode, 'parent.styles.nativeTextRet', {});
     const attrHref = htmlAttribs.href || '';
+    const oldDotPath = (attrHref.startsWith("https://www.expensify.com/") && attrHref.replace("https://www.expensify.com/",''));
     const internalExpensifyPath = (attrHref.startsWith(CONST.NEW_EXPENSIFY_URL) && attrHref.replace(CONST.NEW_EXPENSIFY_URL, ''))
         || (attrHref.startsWith(CONST.STAGING_NEW_EXPENSIFY_URL) && attrHref.replace(CONST.STAGING_NEW_EXPENSIFY_URL, ''));
 
@@ -30,6 +32,17 @@ const AnchorRenderer = (props) => {
             <Text
                 style={styles.link}
                 onPress={() => Navigation.navigate(internalExpensifyPath)}
+            >
+                <TNodeChildrenRenderer tnode={props.tnode} />
+            </Text>
+        );
+    }
+
+    if (oldDotPath) {
+        return (
+            <Text
+                style={styles.link}
+                onPress={() => openOldDotLink(oldDotPath)}
             >
                 <TNodeChildrenRenderer tnode={props.tnode} />
             </Text>
