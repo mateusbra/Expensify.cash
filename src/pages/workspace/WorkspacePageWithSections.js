@@ -71,7 +71,7 @@ class WorkspacePageWithSections extends React.Component {
 
     render() {
         const achState = lodashGet(this.props.reimbursementAccount, 'achData.state', '');
-        const hasVBA = achState === BankAccount.STATE.OPEN;
+        const hasVBA = achState === BankAccount.STATE.SETUP;
         const isUsingECard = lodashGet(this.props.user, 'isUsingExpensifyCard', false);
         const policyID = lodashGet(this.props.route, 'params.policyID');
         const policyName = lodashGet(this.props.policy, 'name');
