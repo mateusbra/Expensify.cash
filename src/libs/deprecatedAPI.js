@@ -262,19 +262,6 @@ function Report_GetHistory(parameters) {
 
 /**
  * @param {Object} parameters
- * @param {Number} parameters.reportID
- * @param {Number} parameters.reportActionID
- * @param {String} parameters.reportComment
- * @returns {Promise}
- */
-function Report_EditComment(parameters) {
-    const commandName = 'Report_EditComment';
-    requireParameters(['reportID', 'reportActionID', 'reportComment'], parameters, commandName);
-    return Network.post(commandName, parameters);
-}
-
-/**
- * @param {Object} parameters
  * @param {String} parameters.email
  * @returns {Promise}
  */
@@ -330,16 +317,6 @@ function User_UploadAvatar(parameters) {
     const commandName = 'User_UploadAvatar';
     requireParameters(['file'], parameters, commandName);
     return Network.post(commandName, parameters);
-}
-
-/**
- * Runs command that will fix malformed data in a users account and also run migrations.
- *
- * @returns {Promise}
- */
-function User_FixAccount() {
-    const commandName = 'User_FixAccount';
-    return Network.post(commandName);
 }
 
 /**
@@ -485,18 +462,6 @@ function BankAccount_SetupWithdrawal(parameters) {
 
 /**
  * @param {Object} parameters
- * @param {Number} parameters.bankAccountID
- * @param {String} parameters.ownerEmail
- * @returns {Promise}
- */
-function DeleteBankAccount(parameters) {
-    const commandName = 'DeleteBankAccount';
-    requireParameters(['bankAccountID'], parameters, commandName);
-    return Network.post(commandName, parameters);
-}
-
-/**
- * @param {Object} parameters
  * @param {Number} [parameters.latitude]
  * @param {Number} [parameters.longitude]
  * @returns {Promise}
@@ -521,18 +486,6 @@ function User_IsUsingExpensifyCard() {
  */
 function Policy_Create(parameters) {
     const commandName = 'Policy_Create';
-    return Network.post(commandName, parameters);
-}
-
-/**
- * @param {Object} parameters
- * @param {String} parameters.policyID
- * @param {String} parameters.value
- * @returns {Promise}
- */
-function Policy_CustomUnit_Update(parameters) {
-    const commandName = 'Policy_CustomUnit_Update';
-    requireParameters(['policyID', 'customUnit'], parameters, commandName);
     return Network.post(commandName, parameters);
 }
 
@@ -623,19 +576,6 @@ function CreatePolicyRoom(parameters) {
 }
 
 /**
- * Renames a user-created policy room
- * @param {Object} parameters
- * @param {String} parameters.reportID
- * @param {String} parameters.reportName
- * @return {Promise}
- */
-function RenameReport(parameters) {
-    const commandName = 'RenameReport';
-    requireParameters(['reportID', 'reportName'], parameters, commandName);
-    return Network.post(commandName, parameters);
-}
-
-/**
  * Transfer Wallet balance and takes either the bankAccoundID or fundID
  * @param {Object} parameters
  * @param {String} [parameters.bankAccountID]
@@ -668,9 +608,7 @@ export {
     CreateChatReport,
     CreateLogin,
     CreatePolicyRoom,
-    RenameReport,
     DeleteLogin,
-    DeleteBankAccount,
     Get,
     GetStatementPDF,
     GetIOUReport,
@@ -687,7 +625,6 @@ export {
     Policy_Employees_Merge,
     RejectTransaction,
     Report_GetHistory,
-    Report_EditComment,
     ResendValidateCode,
     SetNameValuePair,
     SetPassword,
@@ -696,7 +633,6 @@ export {
     User_IsUsingExpensifyCard,
     User_SecondaryLogin_Send,
     User_UploadAvatar,
-    User_FixAccount,
     CreateIOUTransaction,
     CreateIOUSplit,
     ValidateEmail,
@@ -705,7 +641,6 @@ export {
     TransferWalletBalance,
     GetLocalCurrency,
     Policy_Create,
-    Policy_CustomUnit_Update,
     Policy_CustomUnitRate_Update,
     Policy_Employees_Remove,
     PreferredLocale_Update,

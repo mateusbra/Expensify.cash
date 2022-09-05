@@ -19,7 +19,7 @@ import Popover from '../../../../components/Popover';
 import MenuItem from '../../../../components/MenuItem';
 import Text from '../../../../components/Text';
 import * as PaymentMethods from '../../../../libs/actions/PaymentMethods';
-import getClickedElementLocation from '../../../../libs/getClickedElementLocation';
+import getClickedTargetLocation from '../../../../libs/getClickedTargetLocation';
 import withWindowDimensions from '../../../../components/withWindowDimensions';
 import CurrentWalletBalance from '../../../../components/CurrentWalletBalance';
 import ONYXKEYS from '../../../../ONYXKEYS';
@@ -32,6 +32,7 @@ import KYCWall from '../../../../components/KYCWall';
 import {propTypes, defaultProps} from './paymentsPagePropTypes';
 import {withNetwork} from '../../../../components/OnyxProvider';
 import * as PaymentUtils from '../../../../libs/PaymentUtils';
+import OfflineWithFeedback from '../../../../components/OfflineWithFeedback';
 
 class BasePaymentsPage extends React.Component {
     constructor(props) {
@@ -89,7 +90,7 @@ class BasePaymentsPage extends React.Component {
         if (!this.state.addPaymentMethodButton) {
             return;
         }
-        const buttonPosition = getClickedElementLocation(this.state.addPaymentMethodButton);
+        const buttonPosition = getClickedTargetLocation(this.state.addPaymentMethodButton);
         this.setPositionAddPaymentMenu(buttonPosition);
     }
 
@@ -128,9 +129,9 @@ class BasePaymentsPage extends React.Component {
      * @param {Boolean} isDefault
      */
     paymentMethodPressed(nativeEvent, accountType, account, isDefault) {
-        const position = getClickedElementLocation(nativeEvent);
+        const position = getClickedTargetLocation(nativeEvent.currentTarget);
         this.setState({
-            addPaymentMethodButton: nativeEvent,
+            addPaymentMethodButton: nativeEvent.currentTarget,
         });
         if (accountType) {
             let formattedSelectedPaymentMethod;
@@ -246,7 +247,7 @@ class BasePaymentsPage extends React.Component {
         if (this.state.selectedPaymentMethodType === CONST.PAYMENT_METHODS.PAYPAL) {
             PaymentMethods.deletePayPalMe();
         } else if (this.state.selectedPaymentMethodType === CONST.PAYMENT_METHODS.BANK_ACCOUNT) {
-            BankAccounts.deleteBankAccount(this.state.selectedPaymentMethod.bankAccountID);
+            BankAccounts.deletePaymentBankAccount(this.state.selectedPaymentMethod.bankAccountID);
         } else if (this.state.selectedPaymentMethodType === CONST.PAYMENT_METHODS.DEBIT_CARD) {
             PaymentMethods.deletePaymentCard(this.state.selectedPaymentMethod.fundID);
         }
@@ -433,6 +434,7 @@ class BasePaymentsPage extends React.Component {
                     shouldShowCancelButton
                     danger
                 />
+                <OfflineWithFeedback onClose={() => PaymentMethods.clearWalletError()} errors={this.props.userWallet.errors} errorRowStyles={[styles.ph6, styles.pv2]} />
             </ScreenWrapper>
         );
     }
